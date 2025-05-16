@@ -42,7 +42,12 @@ async function LoginController(
     }
 
     res.status(200).
-    cookie("access_token", data.token).
+    cookie("access_token", data.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',  // hanya aktif di production (misal di Vercel)
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    }).
     cookie("refresh_token", data.refreshToken, {
       httpOnly: true,
       secure: true, // cookie only over HTTPS in prod
