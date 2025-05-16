@@ -214,6 +214,19 @@ async function RefreshToken(req: Request, res: Response) {
   try {
     const payload = verify(token, String(REFRESH_SECRET)) as JwtPayload;
 
+    const newRefreshToken = sign(payload, String(REFRESH_SECRET), {
+      expiresIn: "7d",
+    });
+
+    // Kirim refresh token baru di cookie
+    res.status(200).cookie('refresh_token', newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+
     const newAccessToken = sign(
       {
         email: payload.email,

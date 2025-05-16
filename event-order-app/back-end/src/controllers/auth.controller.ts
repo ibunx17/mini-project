@@ -46,7 +46,7 @@ async function LoginController(
     cookie("refresh_token", data.refreshToken, {
       httpOnly: true,
       secure: true, // cookie only over HTTPS in prod
-      sameSite: "lax", // or "none" for cross-site, but "none" requires HTTPS
+      sameSite: "none", // or "none" for cross-site, but "none" requires HTTPS
       path: "/",
     }).
     send({
